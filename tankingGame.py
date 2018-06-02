@@ -57,7 +57,7 @@ def becomeStar(pickRating, pickNumber):
 def becomeRolePlayer(pickRating, pickNumber):
     #does this player become a role player?
     if(pickNumber <= 3):
-        return (pickRating >= 40)
+        return (pickRating >= 35)
     elif(pickNumber <= 6):
         return (pickRating >= 50)
     elif(pickNumber <= 14):
@@ -101,7 +101,7 @@ def init(data):
     data.picks = [ ]
     #genPicks(data, 1, 0, 2)
     data.buttons = [ ]
-    data.GMscore = 80
+    data.GMscore = 85
     data.draftCol = data.width/2
     genButtons(data)
     data.scoreTime = False
@@ -147,6 +147,9 @@ def stayEmployed(data, defaultScore):
             starCount = starCount + 1
         if((player.pickNumber == 1) and (player.status == "bust")):
             newScore = newScore - 40
+        if(player.pickNumber <= 3):
+            if(player.status == "role player"): #later make this factor in tenure
+                newScore = newScore - 5
         elif(player.pickNumber < 6):
             if(player.status == "bust"):
                 newScore = newScore - 15
@@ -157,8 +160,8 @@ def stayEmployed(data, defaultScore):
             elif(player.status == "role player"):
                 newScore = newScore + 0
             elif(player.status == "scrub"):
-                newScore = newScore - 5
-        elif(player.pickNumber < 14):
+                newScore = newScore - 15
+        elif(player.pickNumber < 15):
             if(player.status == "bust"):
                 newScore = newScore - 10
             elif(player.status == "star"):
@@ -171,7 +174,7 @@ def stayEmployed(data, defaultScore):
                 newScore = newScore - 3
         elif(player.pickNumber <= 30):
             if(player.status == "bust"):
-                newScore = newScore - 6
+                newScore = newScore - 4
             elif(player.status == "star"):
                 newScore = newScore + 4 
             elif(player.status == "all-star"):
@@ -182,7 +185,7 @@ def stayEmployed(data, defaultScore):
                 newScore = newScore - 2
         elif(player.pickNumber > 30):
             if(player.status == "bust"):
-                newScore = newScore - 3
+                newScore = newScore - 1
             elif(player.status == "star"):
                 newScore = newScore + 6 
             elif(player.status == "all-star"):
@@ -190,7 +193,7 @@ def stayEmployed(data, defaultScore):
             elif(player.status == "role player"):
                 newScore = newScore + 3
             elif(player.status == "scrub"):
-                newScore = newScore - 1
+                newScore = newScore
 
     data.GMscore = newScore
     if(starCount > 2):
@@ -222,9 +225,9 @@ def timerFired(data):
     if(len(data.picks) > 0):
         data.scoreTime = True
     if(len(data.picks) == 0 and data.scoreTime == True):
-        stayEmployed(data, 80)
+        stayEmployed(data, 85)
         data.scoreTime = False
-    if(data.GMscore < 60):
+    if(data.GMscore < 70):
         data.gameover = True
 
 ##################
