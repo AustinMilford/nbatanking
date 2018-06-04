@@ -143,6 +143,7 @@ def stayEmployed(data, defaultScore):
     newScore = defaultScore
     starCount = 0
     for player in data.team:
+        print(str(newScore))
         if(player.status == "star" or player.status == "all-star"):
             starCount = starCount + 1
         if((player.pickNumber == 1) and (player.status == "bust")):
@@ -154,7 +155,7 @@ def stayEmployed(data, defaultScore):
             if(player.status == "bust"):
                 newScore = newScore - 15
             elif(player.status == "star"):
-                newScore = newScore + 2 
+                newScore = newScore + 2
             elif(player.status == "all-star"):
                 newScore = newScore + 4
             elif(player.status == "role player"):
@@ -196,8 +197,8 @@ def stayEmployed(data, defaultScore):
                 newScore = newScore
 
     data.GMscore = newScore
+    print(str(data.GMscore) + " = " + str(newScore))
     if(starCount > 2):
-        print("Congrats! You won!")
         data.win = True
 
 def mousePressed(event, data):
@@ -207,7 +208,7 @@ def mousePressed(event, data):
         if(butt.containsPoint(event.x, event.y)):
             if((butt.name == "draft") and (len(data.picks) > 0)):
                 lotteryPick(data, data.picks.pop(0))
-            if(butt.name == "new year"):
+            if((butt.name == "new year") and(len(data.picks) == 0)):
                 genPicks(data, 1, 0, 1)
 
 def redrawAll(canvas, data):
@@ -217,6 +218,10 @@ def redrawAll(canvas, data):
     canvas.create_text((data.width/4)*3, data.width/4, text="GM Score: " + str(data.GMscore))
     if(data.gameover):
         canvas.create_text(data.width/2, (data.height/4)*3, text="GAME OVER")
+    if(data.win):
+        canvas.create_text(data.width/2, (data.height/4)*3, text="You Win!")
+
+
 
 def keyPressed(event, data):
     pass
